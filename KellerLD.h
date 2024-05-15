@@ -36,6 +36,7 @@ THE SOFTWARE.
 #define KELLERLD_H_BLUEROBOTICS
 
 #include "Arduino.h"
+#include <Wire.h>
 
 class KellerLD {
 public:
@@ -48,7 +49,8 @@ public:
   /** Reads the onboard memory map to determine min and max pressure as 
    *  well as manufacture date, mode, and customer ID.
    */
-	void init();
+	bool init(TwoWire &wirePort = Wire);
+	bool begin(TwoWire &wirePort = Wire); // Calls init()
 
 	/** Provide the density of the working fluid in kg/m^3. Default is for 
 	 * seawater. Should be 997 for freshwater.
@@ -103,6 +105,9 @@ public:
 	float P_max;
 
 private:
+	//This stores the requested i2c port
+	TwoWire * _i2cPort;
+
 	float fluidDensity;
 	float T_degc;
 
